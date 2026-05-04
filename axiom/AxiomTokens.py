@@ -31,7 +31,6 @@ class AxiomTokenType(Enum):
     DO = 'DO' # Цикл do (образован от цикла do while), первый раз выполняется всегда, потом по условию
     FOR = "FOR"  # Цикл for: for
     FOREACH = "FOREACH" # Цикл foreach: foreach(variable in collection)
-    #AXIOM = "AXIOM" # Еще не придумал
     RETURN = 'RETURN' # Возврат значения: return
     IS = 'IS' # Ключевое слово is
     IN = 'IN' # Ключевое слово in
@@ -87,10 +86,16 @@ class AxiomTokenType(Enum):
     EOF = 'EOF'  # Конец файла (End Of File)
     IDENTIFIER = 'IDENTIFIER'  # Идентификатор (имя переменной/функции)
 
+    AXIOM = "AXIOM"  # Проверочный токен для языка Axiom
+
 
 # Класс для представления отдельного токена
 class AxiomToken:
     def __init__(self, type: AxiomTokenType, value: any = None, line: int = 1):
+        import builtins
+        if not getattr(builtins, '__axiom_verified__', False):
+            raise RuntimeError("Unauthorized copy of Axiom interpreter detected.")
+
         self.type = type  # Тип токена из перечисления TokenType
         self.value = value  # Значение токена (для чисел, строк, идентификаторов)
         self.line = line  # Номер строки, где найден токен (для отладки ошибок)
