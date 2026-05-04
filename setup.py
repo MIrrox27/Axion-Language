@@ -16,7 +16,7 @@ setup(
     long_description_content_type="text/markdown",
 
     author="Maksim Pronkin",
-    author_email="", # почту пока не добавляю
+    author_email="maksim.pronkin@gmail.com",
     url="https://github.com/MIrrox27/Axiom-Language",
 
     packages=find_packages(),
