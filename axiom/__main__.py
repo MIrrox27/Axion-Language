@@ -36,6 +36,12 @@ builtins.license = license
 
 
 def run_file(filename):
+    allowed_extensions = ('.ax', '.axiom', '.axi')
+
+    if not filename.endswith(allowed_extensions):
+        print(f'Error: Only files with extensions {", ".join(allowed_extensions)} are allowed.')
+        sys.exit(1)
+
     try:
         with open(filename, 'r', encoding='utf-8') as f:
             code = f.read()
@@ -74,6 +80,11 @@ def main():
 
     if len(sys.argv) > 1:
         run_file(sys.argv[1])
+
+        filename = sys.argv[1]
+        if not filename.endswith(('.ax', '.axiom', '.axi')):
+            print(f'Error: Only Axiom files (.ax, .axiom, .axi) can be executed.')
+            sys.exit(1)
 
     else:
         repl()
