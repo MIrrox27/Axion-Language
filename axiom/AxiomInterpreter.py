@@ -147,6 +147,10 @@ class UserFunction(Callable):
 
 class AxiomInterpreter: # класс интерпретатора
     def __init__(self):
+        import builtins
+        if not getattr(builtins, '__axiom_verified__', False):
+            raise RuntimeError("Unauthorized copy of Axiom interpreter detected.")
+
         self.error = Error(module='AxiomInterpreter')
 
         self.global_env = AxiomEnvironment() # глобальное окружение
@@ -160,9 +164,12 @@ class AxiomInterpreter: # класс интерпретатора
 
 
 
+
             # --------ВСТРОЕННЫЕ ФУНКЦИИ--------
 
     def _register_builtins(self):
+        import re
+
 
         def print_func(*args):  # print выводит значения через пробел
             output = ' '.join(str(arg) for arg in args)
@@ -198,12 +205,28 @@ class AxiomInterpreter: # класс интерпретатора
         self.global_env.define('is_int', Callable('is_int', 1, is_int_func))
 
 
-        #def calculate(expressions):
-           # expressions = list(expressions)
+        def len_func(data):
+            return len(data)
+        self.global_env.define('len', Callable('len', 1, len_func))
 
 
-        # тут будут все остальные функции
+        def isdigit_func(data):
+            return data.isdigit()
+        self.global_env.define('isdigit', Callable('isdigit', 1, isdigit_func))
 
+
+        def isalpha_func(data):
+            return data.isalpha()
+        self.global_env.define('isalpha', Callable('isalpha', 1, isalpha_func))
+
+        def isspecial_func(data): # Проверка на специальные символы в строке
+            if re.search(r'[^a-zA-Z0-9\s]', data):
+                return True
+            return False
+        self.global_env.define('isspecial', Callable('isspecial', 1, isspecial_func))
+
+        from axiom.AxiomLicense import license_func
+        self.global_env.define('license', Callable('license', -1, license_func))
 
 
 
@@ -295,15 +318,15 @@ class AxiomInterpreter: # класс интерпретатора
                 простых чат ботов этого достаточно. 
                 
                 
-                
                 Для полноценной работы модуля мне придется добавить словари, но на начальном этапе 
                 они будут не такими функциональными как я описывал в файле AxiomASTNodes.py. Реализацией словарей я займусь
                 после Ai модуля
         
         """
+        global ai, client
+        ai = Ai
+        client = Client
 
-        ai = Ai()
-        client = Client(ai=ai)
 
         """
             У меня появилась идея как реализовать работу с большим количеством клиентов, функция set_client будет
@@ -316,15 +339,16 @@ class AxiomInterpreter: # класс интерпретатора
                 # --- функции Model ---
 
         def set_model_func(model, temperature, max_tokens, stream): # Создать модель
-            return ai.set_model(
+            ai = Ai(
                 model,
                 temperature,
                 max_tokens,
                 stream
                 )
+            return ai
 
         def get_model_func(): # Получить данные модели
-            return ai.get_model()
+            return ai
 
 
                 # Регистрация функций Model
@@ -336,14 +360,18 @@ class AxiomInterpreter: # класс интерпретатора
                 # --- функции Client ---
 
         def set_client_func(api, base_url, context): # Создать клиент
-            return client.set_client(
+            client = Client(
                 api,
                 base_url,
-                context
+                context,
+                ai=ai
             )
 
+            #print('Создать клиент')
+            #return client
+
         def get_client_func(): # Получить данные клиента
-            return client.get_client()
+            return client
 
 
         def reset_context_func(new_context): # Перезапись контекста
