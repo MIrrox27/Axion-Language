@@ -1,4 +1,4 @@
-# author https://github.com/MIrrox27/Axiom
+# author https://github.com/MIrrox27/Axiom-Language
 # setup.py
 
 
@@ -17,7 +17,7 @@ setup(
 
     author="Maksim Pronkin",
     author_email="", # почту пока не добавляю
-    url="https://github.com/MIrrox27/Axiom",
+    url="https://github.com/MIrrox27/Axiom-Language",
 
     packages=find_packages(),
     entry_points={
