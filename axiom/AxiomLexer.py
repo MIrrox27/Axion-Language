@@ -5,10 +5,11 @@ from axiom.AxiomTokens import *
 
 
 class AxiomLexer:
-
-
-
     def __init__(self, text: str):
+        import builtins
+        if not getattr(builtins, '__axiom_verified__', False):
+            raise RuntimeError("Unauthorized copy of Axiom interpreter detected.")
+
         self.text = text  # сам код который мы передаем в наш интерпритатор
         self.position = 0  # позиция "курсора" в тексте порядковый номер символа
         self.line = 1  # линия (строка в которой мы находимся) (по типу координаты Y)
