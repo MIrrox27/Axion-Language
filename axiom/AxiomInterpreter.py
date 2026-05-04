@@ -153,7 +153,12 @@ class AxiomInterpreter: # класс интерпретатора
 
         self.error = Error(module='AxiomInterpreter')
 
-        self.global_env = AxiomEnvironment() # глобальное окружение
+            # Глобальные объекты классов
+        self.ai_module_client = None
+        self.ai_module_ai = None
+
+            # Глобальное окружение
+        self.global_env = AxiomEnvironment()
         self.env = self.global_env
 
         self.modules = {}  # все модули
@@ -323,9 +328,6 @@ class AxiomInterpreter: # класс интерпретатора
                 после Ai модуля
         
         """
-        global ai, client
-        ai = Ai
-        client = Client
 
 
         """
@@ -338,21 +340,21 @@ class AxiomInterpreter: # класс интерпретатора
 
                 # --- функции Model ---
 
-        def set_model_func(model, temperature, max_tokens, stream): # Создать модель
-            ai = Ai(
+        def set_model_func(model, temperature, max_tokens): # Создать модель
+            self.ai_module_ai = Ai(
                 model,
                 temperature,
-                max_tokens,
-                stream
+                max_tokens
                 )
-            return ai
+            return self.ai_module_ai
+
 
         def get_model_func(): # Получить данные модели
-            return ai
+            return self.ai_module_ai
 
 
                 # Регистрация функций Model
-        module.define('set_model', Callable(f'{module_name}.set_model', 4, set_model_func))
+        module.define('set_model', Callable(f'{module_name}.set_model', 3, set_model_func))
         module.define('get_model', Callable(f'{module_name}.get_model', -1, get_model_func))
 
 
@@ -360,47 +362,46 @@ class AxiomInterpreter: # класс интерпретатора
                 # --- функции Client ---
 
         def set_client_func(api, base_url, context): # Создать клиент
-            client = Client(
+            self.ai_module_client = Client(
                 api,
                 base_url,
-                context,
-                ai=ai
+                context
             )
 
-            #print('Создать клиент')
-            #return client
+            return self.ai_module_client
+
 
         def get_client_func(): # Получить данные клиента
-            return client
+            return self.ai_module_client
 
 
-        def reset_context_func(new_context): # Перезапись контекста
-            return client.reset_context(new_context)
+       # def reset_context_func(new_context): # Перезапись контекста
+            #return self.ai_module_client.reset_context(new_context)
 
 
-        def add_msg_to_context_func(msg): # Добавить сообщение в контекст, принимает строку или словарь
-            return client.add_msg_to_context(msg)
+       # def add_msg_to_context_func(msg): # Добавить сообщение в контекст, принимает строку или словарь
+            #return self.ai_module_client.add_msg_to_context(msg)
 
 
 
                 # Регистрация функций Client
         module.define('set_client', Callable(f'{module_name}.set_client', 3, set_client_func))
         module.define('get_client', Callable(f'{module_name}.get_client', -1, get_client_func))
-        module.define('reset_context', Callable(f'{module_name}.reset_context', 1, reset_context_func))
-        module.define('add_msg_to_context', Callable(f'{module_name}.add_msg_to_context', 1, add_msg_to_context_func))
+        #module.define('reset_context', Callable(f'{module_name}.reset_context', 1, reset_context_func))
+        #module.define('add_msg_to_context', Callable(f'{module_name}.add_msg_to_context', 1, add_msg_to_context_func))
 
 
 
                 # --- функции Response ---
 
-        def send_msg(msg): # Функция для отправки сообщения, на вход принимает сообщение, остальная информация привязана к клиенту
-            response = Response(msg=msg, client=client)
-            bot_answer = response.send_response()
+        def send_msg(msg, client, ai): # Функция для отправки сообщения, на вход принимает сообщение, остальная информация привязана к клиенту
+            response = Response(msg=msg, client=client, ai=ai)
+            bot_answer = response.send_msg()
             return bot_answer
 
 
                 # Регистрация функций Response
-        module.define('send_msg', Callable(f'{module_name}.send_msg', 1, send_msg))
+        module.define('send_msg', Callable(f'{module_name}.send_msg', 3, send_msg))
 
 
 
@@ -490,12 +491,20 @@ class AxiomInterpreter: # класс интерпретатора
 
     def visit_MemberAccess(self, node):  # Вычисляет доступ к члену объекта
         obj = self.visit(node.obj)
-
-        if not isinstance(obj, Module):
-            self.error.raise_error(f"Cannot access member of non-module object: {obj}", 'visit_MemberAccess')
-
         # print(f"DEBUG: Accessing {node.obj}.{node.member}")
-        return obj.get(node.member)
+
+        if isinstance(obj, Module):
+            return obj.get(node.member)
+
+        print(obj)
+        if hasattr(obj, node.member):
+            return getattr(obj, node.member)
+
+
+        self.error.raise_error(f"Cannot access member of non-module object: {obj}", 'visit_MemberAccess')
+
+
+
 
 
 

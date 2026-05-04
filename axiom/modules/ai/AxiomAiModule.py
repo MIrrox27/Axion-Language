@@ -6,6 +6,8 @@ from openai import OpenAI
 import requests, json
 import os, time
 
+from pyexpat.errors import messages
+
 from axiom.modules.ai.api import MODEL_URL, MODEL_TOKEN, MODEL_NAME # токен и url
 
 
@@ -41,37 +43,28 @@ class AiModule:
 
 
 
+
+
+
+
+
 class Ai(AiModule):
-    def __init__(self, model=None, temperature=0.5, max_tokens=250, stream=False):
-        self.model = model
+    def __init__(self, model_name, temperature=0.5, max_tokens=250):
+        self.model_name = model_name
         self.temperature = temperature
         self.max_tokens = max_tokens
-        self.stream = stream
-
-        if self.stream:
-            self.error.raise_error('Real-time data retrieval is temporarily unavailable.', '__init__')
 
 
-    def set_model(self, model, temperature, max_tokens, stream): # функция в Axiom для создания модели
-        self.model = model
-        self.temperature = temperature
-        self.max_tokens = max_tokens
-        self.stream = stream
-
-        if self.stream:
-            self.error.raise_error('Real-time data retrieval is temporarily unavailable.', 'set_model')
 
 
-    #def get_model(self): pass
 
 
 
 class Client(AiModule): # класс для отправки запросов, хранения контекста
 
-
-    def __init__(self, api=None, base_url=None, context=None, ai=None):
+    def __init__(self, api, base_url, context):
         self.default_context = [
-        {"role": "system", "content": "Ты — ассистент"}
+        {"role": "system", "content": ""}
         ]
 
         self.api = api
@@ -80,114 +73,66 @@ class Client(AiModule): # класс для отправки запросов, �
         if context == None:
             self.context = self.default_context
         else:
-            self.context =  context
+            self.context = context
 
-        self.model = ai.model
+"""     
+        self.model_name = ai.model_name
         self.temperature = ai.temperature
         self.max_tokens = ai.max_tokens
         self.stream = ai.stream
+"""
 
 
 
 
-
-    def set_client(self, api, base_url, context): # функция в Axiom для создания клиента
-        self.api = api
-        self.base_url = base_url
-        if context == None:
-            self.context = self.default_context
-        else:
-            self.context = context
-
-        self.client = OpenAI(
-            base_url=self.base_url,
-            api_key=self.api
-        )
-
-
-
-
-    def reset_context(self, new_context): # функция в Axiom для обновления контекста
-        self.context = new_context
-        return self.context
-
-
-    def clear_context(self):
-        self.context = None
-        return self.context
-
-
-    def add_msg_to_context(self, messages):
-        func = 'add_to_context'
-
-        if isinstance(messages, (int, str, float)):
-            self.client.context.append({
-            'role': 'user',
-            'content': str(messages)
-            })
-
-        elif isinstance(messages, dict):
-            self.client.context.append(messages)
-
-        else:
-            self.error.raise_error(f'Invalid message format: {messages}', func=func)
-
-        return self.client.context
-
-
-    #def get_client(self): pass
-
-
-
-
-
-
-
-class Response(Client):
-    def __init__(self, client, msg):
+class Response(AiModule):
+    def __init__(self, client, ai, msg):
         self.client = client
+        self.ai = ai
         self.msg = msg
 
 
+    def send_msg(self):
+        full_url = self.client.base_url
+        if not full_url.endswith('/chat/completions'):
+            full_url = full_url.rstrip('/') + '/chat/completions'
 
-    def send_response(self):
-        func = 'send_response'
+        self.client.context.append(
+            {'role': 'user',
+             'content': str(self.msg)
+             })
 
+        response = requests.post(
+            url=full_url,
 
-        if isinstance(self.msg, (int, str, float)):
-            self.client.context.append({
-            'role': 'user',
-            'content': str(self.msg)
+            headers={
+                "Authorization": f"Bearer {str(self.client.api)}",
+                "Content-Type": "application/json"
+            },
+
+            data=json.dumps({
+                "model": str(self.ai.model_name),
+                "messages": self.client.context,
+                "temperature": self.ai.temperature,
+                "max_tokens": self.ai.max_tokens
+
             })
-
-        elif isinstance(self.msg, dict):
-            self.client.context.append(self.msg)
-
-        else:
-            self.error.raise_error(f'Invalid message format: {self.msg}', func=func)
-
-
-        response = self.client.client.chat.completions.create( # отправляем
-            model=self.client.model,
-            messages=self.client.context,
-            temperature=self.client.temperature,
-            stream=self.client.stream
         )
 
+        result = response.json()
+        answer = result['choices'][0]['message']['content']
 
-        bot_answer = response.choices[0].message.content
+        self.client.context.append(
+            {'role': 'assistant',
+             'content': str(answer)
+             })
 
-        while True:
-            time.sleep(0.1)
-            if bot_answer != None:
-                break
+        #print(self.client.context)
+        return answer
 
-        self.client.context.append({
-            'role': 'assistant',
-            'content': str(bot_answer)
-            })
 
-        return bot_answer
+
+
 
 
 
