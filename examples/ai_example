@@ -1,0 +1,26 @@
+import ai
+
+val MODEL_TOKEN = 'тут должен быть токен/api' // пример
+val MODEL_URL = 'https://openrouter.ai' // пример
+val MODEL_NAME = 'deepseek:r1' // пример
+
+
+var model = ai.set_model(MODEL_NAME, 0.5, 400)
+print("Модель создана", model)
+
+
+var client = ai.set_client(MODEL_TOKEN, MODEL_URL, None)
+print("Клиент создан", client)
+
+
+for (var i = 0; i < 10; i++){
+    var msg = input("Вы: ")
+
+    var answer = ai.send_msg(msg, client, model)
+    print("Нейросеть:", answer)
+
+
+}
+print('Запросы закончились, патаму шта автар этай праграмы таг захател')
+
+
