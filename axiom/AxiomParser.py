@@ -11,6 +11,10 @@ from  axiom.AxiomTokens import AxiomTokenType
 class AxiomParser:
 
     def __init__(self, lexer, debug=False):
+        import builtins
+        if not getattr(builtins, '__axiom_verified__', False):
+            raise RuntimeError("Unauthorized copy of Axiom interpreter detected.")
+
         self.lexer = lexer
         self.current_token = self.lexer.get_next_token()
         self.debug = debug
