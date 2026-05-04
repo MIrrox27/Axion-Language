@@ -1,4 +1,4 @@
-# author # author https://github.com/MIrrox27/Axiom-Language
+# author https://github.com/MIrrox27/Axiom-Language
 # repl.py
 
 from axiom.AxiomTokens import *
@@ -6,13 +6,15 @@ from axiom.AxiomLexer import *
 from axiom.AxiomParser import *
 from axiom.AxiomASTNodes import *
 from axiom.AxiomInterpreter import *
-from axiom import __version__
+from axiom import __version__, _check_author_maker
+
 
 
 def repl():
     interpreter = AxiomInterpreter()
-    print("Axiom REPL (type 'exit' to quit)")
-    print(f"Version {__version__}")
+    #print("Запуск через repl")
+    print(f"Axiom Language v{__version__} (c) 2024 Maksim Pronkin")
+    #print(f"Version {__version__}")
 
     __all__ = [
         'AxiomLexer',
@@ -21,3 +23,4 @@ def repl():
         'AxiomTokenType',
         '__version__',
     ]
+
