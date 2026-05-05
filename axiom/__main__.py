@@ -36,7 +36,7 @@ builtins.license = license
 
 
 def run_file(filename):
-    allowed_extensions = ('.ax', '.axiom', '.axi')
+    allowed_extensions = ('.axm', '.axi', '.ax')
 
     if not filename.endswith(allowed_extensions):
         print(f'Error: Only files with extensions {", ".join(allowed_extensions)} are allowed.')
