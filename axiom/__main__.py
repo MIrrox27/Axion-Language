@@ -39,9 +39,15 @@ builtins.license = license
 def run_file(filename):
     allowed_extensions = ('.axm', '.axi', '.ax')
 
+
+
     current_dir = os.path.dirname(os.path.abspath(__file__))
     parent_dir = os.path.dirname(current_dir)
     path_license = os.path.join(parent_dir, 'LICENSE')
+
+    if not os.path.isfile(path_license):
+        print('[ERROR] Invalid license: License not found')
+        sys.exit(1)
 
     with open(path_license, 'r', encoding='utf-8') as f:
         axm_license = f.read()
@@ -49,7 +55,7 @@ def run_file(filename):
         if str(axm_license) != __axiom_license__ :
             #print(f'\n\n\n {axm_license}\n\n\n')
             #print(f'\n\n\n {__axiom_license__}\n\n\n')
-            print('[ERROR] Invalid license: No license found or the license has been modified')
+            print('[ERROR] Invalid license: License has been modified')
             sys.exit(1)
 
     if not filename.endswith(allowed_extensions):
