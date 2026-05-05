@@ -14,6 +14,7 @@ from axiom.AxiomParser import *
 from axiom.AxiomInterpreter import *
 
 from axiom.repl import repl
+from axiom.AxiomLicense import __axiom_license__
 
 
 
@@ -38,8 +39,21 @@ builtins.license = license
 def run_file(filename):
     allowed_extensions = ('.axm', '.axi', '.ax')
 
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    parent_dir = os.path.dirname(current_dir)
+    path_license = os.path.join(parent_dir, 'LICENSE')
+
+    with open(path_license, 'r', encoding='utf-8') as f:
+        axm_license = f.read()
+
+        if str(axm_license) != __axiom_license__ :
+            #print(f'\n\n\n {axm_license}\n\n\n')
+            #print(f'\n\n\n {__axiom_license__}\n\n\n')
+            print('[ERROR] Invalid license: No license found or the license has been modified')
+            sys.exit(1)
+
     if not filename.endswith(allowed_extensions):
-        print(f'Error: Only files with extensions {", ".join(allowed_extensions)} are allowed.')
+        print(f'[ERROR]: Only files with extensions {", ".join(allowed_extensions)} are allowed.')
         sys.exit(1)
 
     try:
@@ -47,11 +61,11 @@ def run_file(filename):
             code = f.read()
 
     except FileExistsError:
-        print(f'Error: File "{filename}" not found')
+        print(f'[ERROR]: File "{filename}" not found')
         sys.exit(1)
 
     except Exception as e:
-        print(f"Error reading file: {e}")
+        print(f"[ERROR] Reading file: {e}")
         sys.exit(1)
 
 
@@ -92,6 +106,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
