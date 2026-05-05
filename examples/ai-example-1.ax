@@ -14,10 +14,10 @@ print("Клиент создан", client)
 
 
 for (var i = 0; i < 10; i++){
-    var msg = input("Вы: ")
+    var msg = input(" --- Вы: ")
 
     var answer = ai.send_msg(msg, client, model)
-    print("Нейросеть:", answer)
+    print(" --- Нейросеть:", answer)
 
 
 }
