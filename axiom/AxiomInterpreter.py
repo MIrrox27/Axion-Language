@@ -4,6 +4,7 @@
 from axiom.AxiomASTNodes import *
 from axiom.AxiomTokens import *
 from axiom.AxiomPythonNamespace import namespace as py_namespace
+import os
 
 
 class Error:
@@ -184,6 +185,16 @@ class AxiomInterpreter: # класс интерпретатора
         self.global_env.define('print', Callable('print', -1, print_func)) # регистрируем функцию
 
 
+        def clear_print_func(*args):
+            output = ' '.join(str(arg) for arg in args)
+            # print(f"DEBUG: print called with args={args}, output={output}")  # временно
+            os.system('cls' if os.name == 'nt' else 'clear')
+            print(output)
+            return None
+
+        self.global_env.define('clrprint', Callable('crlprint', -1, clear_print_func))
+
+
         def input_func(prompt=""): # принимает только 1 значение
             return input(str(prompt))
         self.global_env.define('input', Callable('input', -1, input_func)) # регистрируем функцию
@@ -352,11 +363,18 @@ class AxiomInterpreter: # класс интерпретатора
         def get_model_func(): # Получить данные модели
             return self.ai_module_ai
 
+        def get_model_info_func():
+            return {
+                'model_name': self.ai_module_ai.model_name,
+                'temperature': self.ai_module_ai.temperature,
+                'max_tokens': self.ai_module_ai.max_tokens
+            }
+
 
                 # Регистрация функций Model
         module.define('set_model', Callable(f'{module_name}.set_model', 3, set_model_func))
         module.define('get_model', Callable(f'{module_name}.get_model', -1, get_model_func))
-
+        module.define('get_model_info', Callable(f'{module_name}.get_model_info', -1, get_model_info_func))
 
 
                 # --- функции Client ---
@@ -371,25 +389,38 @@ class AxiomInterpreter: # класс интерпретатора
             return self.ai_module_client
 
 
-        def get_client_func(): # Получить данные клиента
+        def get_client_func(): # получить объект клиента
             return self.ai_module_client
 
 
-       # def reset_context_func(new_context): # Перезапись контекста
-            #return self.ai_module_client.reset_context(new_context)
+        def get_client_info_func(): # Получить данные клиента
+            return {
+                'api': self.ai_module_client.api,
+                'url': self.ai_module_client.base_url,
+                'context': self.ai_module_client.context
+            }
 
 
-       # def add_msg_to_context_func(msg): # Добавить сообщение в контекст, принимает строку или словарь
-            #return self.ai_module_client.add_msg_to_context(msg)
+        def reset_context_func(): # Очистить контекст
+            return self.ai_module_client.reset_context()
+
+
+        def get_context_func(): # Получить контекст работающего клиента
+            return self.ai_module_client.get_context()
+
+
+        def add_msg_to_context_func(role, msg): # Добавить сообщение в контекст, принимает сообщение и роль
+            return self.ai_module_client.add_msg_to_context(role, msg)
 
 
 
                 # Регистрация функций Client
         module.define('set_client', Callable(f'{module_name}.set_client', 3, set_client_func))
         module.define('get_client', Callable(f'{module_name}.get_client', -1, get_client_func))
-        #module.define('reset_context', Callable(f'{module_name}.reset_context', 1, reset_context_func))
-        #module.define('add_msg_to_context', Callable(f'{module_name}.add_msg_to_context', 1, add_msg_to_context_func))
-
+        module.define('reset_context', Callable(f'{module_name}.reset_context', -1, reset_context_func))
+        module.define('add_msg_to_context', Callable(f'{module_name}.add_msg_to_context', 2, add_msg_to_context_func))
+        module.define('get_client_info', Callable(f'{module_name}.get_client_info', -1, get_client_info_func))
+        module.define('get_context', Callable(f'{module_name}.', -1, get_context_func))
 
 
                 # --- функции Response ---
