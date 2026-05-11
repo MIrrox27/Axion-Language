@@ -1,8 +1,8 @@
-# author https://github.com/MIrrox27/Axiom-Language
-# AxiomLicense.py
+# author https://github.com/MIrrox27/Axion-Language
+# AxionLicense.py
 
 
-__axiom_license__ = """Axiom Language - Copyright (c) 2024 Maksim Pronkin
+__axion_license__ = """Axion Language - Copyright (c) 2024 Maksim Pronkin
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software (the "Software"), to deal in the Software without restriction,
@@ -17,12 +17,12 @@ copies or substantial portions of the Software.
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED.
 
-Project: https://github.com/MIrrox27/Axiom-Language
+Project: https://github.com/MIrrox27/Axion-Language
 Author: Maksim Pronkin"""
 
 
 def license_func():
-    global __axiom_license__
+    global __axion_license__
 
-    print(__axiom_license__)
-    return __axiom_license__
+    print(__axion_license__)
+    return __axion_license__
