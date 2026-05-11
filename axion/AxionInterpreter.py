@@ -1,9 +1,9 @@
-# author https://github.com/MIrrox27/Axiom-Language
-# AxiomInterpreter.py
+# author https://github.com/MIrrox27/Axion-Language
+# AxionInterpreter.py
 
-from axiom.AxiomASTNodes import *
-from axiom.AxiomTokens import *
-from axiom.AxiomPythonNamespace import namespace as py_namespace
+from axion.AxionASTNodes import *
+from axion.AxionTokens import *
+from axion.AxionPythonNamespace import namespace as py_namespace
 import os
 
 
@@ -18,11 +18,11 @@ class Error:
 
 
 
-class AxiomEnvironment: #
+class AxionEnvironment: #
     def __init__(self, parent=None):
         self.variables = {}
         self.parent = parent
-        self.error = Error(module='AxiomEnvironment')
+        self.error = Error(module='AxionEnvironment')
 
 
     def env_error(self, message, func):
@@ -123,7 +123,7 @@ class UserFunction(Callable):
                 'call'
             )
 
-        call_env = AxiomEnvironment(self.closure_env) # создаем новое окружение для вызова функции
+        call_env = AxionEnvironment(self.closure_env) # создаем новое окружение для вызова функции
 
         for param_name, arg_value in zip(self.parameters, args): # Связываем параметры с аргументами
             call_env.define(param_name, arg_value, constant=False)
@@ -146,20 +146,20 @@ class UserFunction(Callable):
 
 
 
-class AxiomInterpreter: # класс интерпретатора
+class AxionInterpreter: # класс интерпретатора
     def __init__(self):
         import builtins
-        if not getattr(builtins, '__axiom_verified__', False):
-            raise RuntimeError("Unauthorized copy of Axiom interpreter detected.")
+        if not getattr(builtins, '__axion_verified__', False):
+            raise RuntimeError("Unauthorized copy of Axion interpreter detected.")
 
-        self.error = Error(module='AxiomInterpreter')
+        self.error = Error(module='AxionInterpreter')
 
             # Глобальные объекты классов
         self.ai_module_client = None
         self.ai_module_ai = None
 
             # Глобальное окружение
-        self.global_env = AxiomEnvironment()
+        self.global_env = AxionEnvironment()
         self.env = self.global_env
 
         self.modules = {}  # все модули
@@ -241,7 +241,7 @@ class AxiomInterpreter: # класс интерпретатора
             return False
         self.global_env.define('isspecial', Callable('isspecial', 1, isspecial_func))
 
-        from axiom.AxiomLicense import license_func
+        from axion.AxionLicense import license_func
         self.global_env.define('license', Callable('license', -1, license_func))
 
 
@@ -302,7 +302,7 @@ class AxiomInterpreter: # класс интерпретатора
             # ----- WEB -----
 
     def _register_web_functions(self, module):
-        #from axiom.modules.web import *
+        #from axion.modules.web import *
         pass
 
 
@@ -310,14 +310,14 @@ class AxiomInterpreter: # класс интерпретатора
             # ----- AI -----
 
     def _register_ai_functions(self, module):
-        from axiom.modules.ai.AxiomAiModule import AiModule, Ai, Client, Response
+        from axion.modules.ai.AxionAiModule import AiModule, Ai, Client, Response
 
         module_name = module.name
 
         """
             Ai модуль:
             
-                В этом модуле я планирую реализовать несколько основных вещей (без использования классов в языке Axiom):
+                В этом модуле я планирую реализовать несколько основных вещей (без использования классов в языке Axion):
                 
                     1) Возможность создать модель
                     
@@ -335,7 +335,7 @@ class AxiomInterpreter: # класс интерпретатора
                 
                 
                 Для полноценной работы модуля мне придется добавить словари, но на начальном этапе 
-                они будут не такими функциональными как я описывал в файле AxiomASTNodes.py. Реализацией словарей я займусь
+                они будут не такими функциональными как я описывал в файле AxionASTNodes.py. Реализацией словарей я займусь
                 после Ai модуля
         
         """
@@ -466,7 +466,7 @@ class AxiomInterpreter: # класс интерпретатора
         if node.value is not None:
             value = self.visit(node.value)
 
-        is_const = (node.keyword == AxiomTokenType.VAL)
+        is_const = (node.keyword == AxionTokenType.VAL)
 
         self.env.define(node.name, value, is_const)
         return None
@@ -501,7 +501,7 @@ class AxiomInterpreter: # класс интерпретатора
 
     def visit_Block(self, node):
         previous_env = self.env # создаем новое окружение для бока
-        self.env = AxiomEnvironment(previous_env)
+        self.env = AxionEnvironment(previous_env)
 
         try:
             for stmt in node.statements:
@@ -543,21 +543,21 @@ class AxiomInterpreter: # класс интерпретатора
         left_val = self.visit(node.left)
 
         # особые операторы
-        if node.operator == AxiomTokenType.AND: # если левый операнд ложный, результат - False, правый нет смысла вычислять
+        if node.operator == AxionTokenType.AND: # если левый операнд ложный, результат - False, правый нет смысла вычислять
             if not self.is_truthy(left_val):
                 return False
 
             right_val = self.visit(node.right)
             return self.is_truthy(right_val)
 
-        elif node.operator == AxiomTokenType.OR:  # если левый операнд истинный, результат - True, правый нет смысла вычислять
+        elif node.operator == AxionTokenType.OR:  # если левый операнд истинный, результат - True, правый нет смысла вычислять
             if self.is_truthy(left_val):
                 return True
 
             right_val = self.visit(node.right)
             return self.is_truthy(right_val)
 
-        elif node.operator == AxiomTokenType.ASSIGN:
+        elif node.operator == AxionTokenType.ASSIGN:
             if not isinstance(node.left, Identifier):
                 self.error.raise_error("Left side of assignment must be a variable", func='visit_BinaryOp')
 
@@ -569,26 +569,26 @@ class AxiomInterpreter: # класс интерпретатора
         right_val = self.visit(node.right)
 
         # Арифметические операторы (возвращают результат)
-        if node.operator == AxiomTokenType.PLUS:
+        if node.operator == AxionTokenType.PLUS:
             self._check_numeric_or_string(left_val, right_val, node.operator)
             return left_val + right_val
 
-        elif node.operator == AxiomTokenType.MINUS:
+        elif node.operator == AxionTokenType.MINUS:
             self._check_numeric(left_val, right_val, node.operator)
             return left_val - right_val
 
-        elif node.operator == AxiomTokenType.MULTIPLY:
+        elif node.operator == AxionTokenType.MULTIPLY:
             self._check_numeric(left_val, right_val, node.operator)
             return left_val * right_val
 
-        elif node.operator == AxiomTokenType.DIVIDE:
+        elif node.operator == AxionTokenType.DIVIDE:
             self._check_numeric(left_val, right_val, node.operator)
 
             if right_val == 0:
                 self.error.raise_error(f"Division by zero", func='visit_BinaryOp')
             return left_val / right_val
 
-        elif node.operator == AxiomTokenType.MOD:
+        elif node.operator == AxionTokenType.MOD:
             self._check_numeric(left_val, right_val, node.operator)
 
             if right_val == 0:
@@ -596,27 +596,27 @@ class AxiomInterpreter: # класс интерпретатора
 
             return left_val % right_val
 
-        elif node.operator == AxiomTokenType.POWER:
+        elif node.operator == AxionTokenType.POWER:
             self._check_numeric(left_val, right_val, node.operator)
             return left_val ** right_val
 
         # Операторы сравнения (возвращают true / false)
-        elif node.operator == AxiomTokenType.EQUALS:
+        elif node.operator == AxionTokenType.EQUALS:
             return left_val == right_val
 
-        elif node.operator == AxiomTokenType.NOT_EQUALS:
+        elif node.operator == AxionTokenType.NOT_EQUALS:
             return left_val != right_val
 
-        elif node.operator == AxiomTokenType.LESS:
+        elif node.operator == AxionTokenType.LESS:
             return  left_val < right_val
 
-        elif node.operator == AxiomTokenType.GREATER:
+        elif node.operator == AxionTokenType.GREATER:
             return left_val > right_val
 
-        elif node.operator == AxiomTokenType.LESS_EQUAL:
+        elif node.operator == AxionTokenType.LESS_EQUAL:
             return left_val <= right_val
 
-        elif node.operator == AxiomTokenType.GREATER_EQUAL:
+        elif node.operator == AxionTokenType.GREATER_EQUAL:
             return left_val >= right_val
 
         else:
@@ -624,11 +624,11 @@ class AxiomInterpreter: # класс интерпретатора
 
 
     def visit_UnaryOp(self, node):
-        if node.operator == AxiomTokenType.NOT:
+        if node.operator == AxionTokenType.NOT:
             val = self.visit(node.expr)
             return not self.is_truthy(val)
 
-        elif node.operator == AxiomTokenType.PLUS:
+        elif node.operator == AxionTokenType.PLUS:
             val = self.visit(node.expr)
 
             if not isinstance(val, (int, float)):
@@ -638,7 +638,7 @@ class AxiomInterpreter: # класс интерпретатора
             )
             return val
 
-        elif node.operator == AxiomTokenType.MINUS:
+        elif node.operator == AxionTokenType.MINUS:
             val = self.visit(node.expr)
             if not  isinstance(val, (int, float)):
                 self.error.raise_error(
@@ -648,7 +648,7 @@ class AxiomInterpreter: # класс интерпретатора
             return -val
 
 
-        elif node.operator == AxiomTokenType.INCREMENT:
+        elif node.operator == AxionTokenType.INCREMENT:
             if not isinstance(node.expr, Identifier):
                 self.error.raise_error(
                 f"Increment operator requires a variable, got {type(node.expr).__name__}",
@@ -668,7 +668,7 @@ class AxiomInterpreter: # класс интерпретатора
             return new_val
 
 
-        elif node.operator == AxiomTokenType.DECREMENT:
+        elif node.operator == AxionTokenType.DECREMENT:
             if not isinstance(node.expr, Identifier):
                 self.error.raise_error(
                 f"Decrement operator requires a variable, got {type(node.expr).__name__}",
@@ -689,7 +689,7 @@ class AxiomInterpreter: # класс интерпретатора
 
 
 
-        elif node.operator == AxiomTokenType.POST_INCREMENT:
+        elif node.operator == AxionTokenType.POST_INCREMENT:
 
             if not isinstance(node.expr, Identifier):
                 self.error.raise_error(
@@ -719,7 +719,7 @@ class AxiomInterpreter: # класс интерпретатора
 
 
 
-        elif node.operator == AxiomTokenType.POST_DECREMENT:
+        elif node.operator == AxionTokenType.POST_DECREMENT:
 
             if not isinstance(node.expr, Identifier):
                 self.error.raise_error(
@@ -787,7 +787,7 @@ class AxiomInterpreter: # класс интерпретатора
 
     def visit_ForStmt(self, node):
         previous_env = self.env # создаем новое окружение
-        self.env = AxiomEnvironment(previous_env)
+        self.env = AxionEnvironment(previous_env)
 
         try:
             if node.initializer is not None:
@@ -837,7 +837,7 @@ class AxiomInterpreter: # класс интерпретатора
         previous_env = self.env # сохраняем текущее окружение
         try:
             for item in items:
-                self.env = AxiomEnvironment(previous_env) # создаем новое окружение
+                self.env = AxionEnvironment(previous_env) # создаем новое окружение
 
                 var_name = node.variable.name
                 self.env.define(var_name, item)
@@ -992,7 +992,7 @@ class AxiomInterpreter: # класс интерпретатора
         # -----Вспомогательные функции для проверки типов-----
 
     def is_truthy(self, value): # смотрит, является ли значение истинным
-        # в Axiom false, 0 и nill считаются ложными, все остальное истинными
+        # в Axion false, 0 и nill считаются ложными, все остальное истинными
         if value is False or value is None:
             return False
 
