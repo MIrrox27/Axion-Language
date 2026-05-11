@@ -1,5 +1,5 @@
-# author https://github.com/MIrrox27/Axiom-Language
-# AxiomPythonNamespace.py
+# author https://github.com/MIrrox27/Axion-Language
+# AxionPythonNamespace.py
 
 import builtins
 
