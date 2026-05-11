@@ -1,11 +1,11 @@
-# author https://github.com/MIrrox27/Axiom-Language
-# AxiomTokens.py
+# author https://github.com/MIrrox27/Axion-Language
+# AxionTokens.py
 
 from enum import Enum
 
 
 # Перечисление всех типов токенов в нашем языке программирования
-class AxiomTokenType(Enum):
+class AxionTokenType(Enum):
     # ЛИТЕРАЛЫ (константные значения)
     INTEGER = 'INTEGER'  # Целое число: 42, 100, -5
     STRING = 'STRING'  # Строка в кавычках: "привет", "мир"
@@ -42,7 +42,7 @@ class AxiomTokenType(Enum):
 
 
 
-    BLOCK = 'BLOCK'  # Ключевое слово для обозначения исполнения блока кода на другом языке block __lang__{axiom}
+    BLOCK = 'BLOCK'  # Ключевое слово для обозначения исполнения блока кода на другом языке block __lang__{axion}
     PYTHON = 'PYTHON'  # Ключевое слово для исполнения кода на питоне
 
     CODE_BLOCK =  'CODE_OPEN' # сочетание символов внутри которых находится код на другом языке: {$ __code__ $}
@@ -86,15 +86,15 @@ class AxiomTokenType(Enum):
     EOF = 'EOF'  # Конец файла (End Of File)
     IDENTIFIER = 'IDENTIFIER'  # Идентификатор (имя переменной/функции)
 
-    AXIOM = "AXIOM"  # Проверочный токен для языка Axiom
+    AXION = "AXION"  # Проверочный токен для языка Axion
 
 
 # Класс для представления отдельного токена
-class AxiomToken:
-    def __init__(self, type: AxiomTokenType, value: any = None, line: int = 1):
+class AxionToken:
+    def __init__(self, type: AxionTokenType, value: any = None, line: int = 1):
         import builtins
-        if not getattr(builtins, '__axiom_verified__', False):
-            raise RuntimeError("Unauthorized copy of Axiom interpreter detected.")
+        if not getattr(builtins, '__axion_verified__', False):
+            raise RuntimeError("Unauthorized copy of Axion interpreter detected.")
 
         self.type = type  # Тип токена из перечисления TokenType
         self.value = value  # Значение токена (для чисел, строк, идентификаторов)
