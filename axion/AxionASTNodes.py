@@ -1,7 +1,7 @@
-# author https://github.com/MIrrox27/Axiom-Language
-# AxiomASTNodes.py
+# author https://github.com/MIrrox27/Axion-Language
+# AxionASTNodes.py
 
-from axiom.AxiomTokens import AxiomTokenType
+from axion.AxionTokens import AxionTokenType
 
 
 
@@ -130,8 +130,8 @@ class ListNode(Expression): # список val/var: literal __name__ [length] = 
     def __init__(self, elements): #(self, keyword, literal, elements, length):
         #self.error = Error('ListNode')
 
-        #if keyword in (AxiomTokenType.VAL, AxiomTokenType.VAR):
-            #self.changeable = True if keyword.type == AxiomTokenType.VAR else False
+        #if keyword in (AxionTokenType.VAL, AxionTokenType.VAR):
+            #self.changeable = True if keyword.type == AxionTokenType.VAR else False
         #else: self.error.error(f"you can't use type '{keyword.type}' in list")
 
         #self.literal = literal
@@ -169,8 +169,8 @@ class DictNode(Expression): # словарь
     def __init__(self, keyword, literal, key, value, length):
         self.error = Error('ListNode')
 
-        if keyword in (AxiomTokenType.VAL, AxiomTokenType.VAR):
-            self.changeable = True if keyword.type == AxiomTokenType.VAR else False
+        if keyword in (AxionTokenType.VAL, AxionTokenType.VAR):
+            self.changeable = True if keyword.type == AxionTokenType.VAR else False
         else:
             self.error.error(f"you can't use type '{keyword.type}' in dict")
 
