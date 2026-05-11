@@ -1,14 +1,14 @@
-# author https://github.com/MIrrox27/Axiom-Language
-# AxiomLexer.py
+# author https://github.com/MIrrox27/Axion-Language
+# AxionLexer.py
 
-from axiom.AxiomTokens import *
+from axion.AxionTokens import *
 
 
-class AxiomLexer:
+class AxionLexer:
     def __init__(self, text: str):
         import builtins
-        if not getattr(builtins, '__axiom_verified__', False):
-            raise RuntimeError("Unauthorized copy of Axiom interpreter detected.")
+        if not getattr(builtins, '__axion_verified__', False):
+            raise RuntimeError("Unauthorized copy of Axion interpreter detected.")
 
         self.text = text  # сам код который мы передаем в наш интерпритатор
         self.position = 0  # позиция "курсора" в тексте порядковый номер символа
@@ -21,41 +21,41 @@ class AxiomLexer:
         self.code_blocks = []
 
         self.KEYWORDS = {  # ключевые слова
-            'import': AxiomTokenType.IMPORT,
+            'import': AxionTokenType.IMPORT,
 
-            'if': AxiomTokenType.IF,
-            'elif': AxiomTokenType.ELIF,
-            'else': AxiomTokenType.ELSE,
+            'if': AxionTokenType.IF,
+            'elif': AxionTokenType.ELIF,
+            'else': AxionTokenType.ELSE,
 
-            'while': AxiomTokenType.WHILE,
-            'do': AxiomTokenType.DO,
-            'for': AxiomTokenType.FOR,
-            'foreach': AxiomTokenType.FOREACH,
+            'while': AxionTokenType.WHILE,
+            'do': AxionTokenType.DO,
+            'for': AxionTokenType.FOR,
+            'foreach': AxionTokenType.FOREACH,
 
-            'var': AxiomTokenType.VAR,
-            'val': AxiomTokenType.VAL,
+            'var': AxionTokenType.VAR,
+            'val': AxionTokenType.VAL,
 
-            'True': AxiomTokenType.BOOL,
-            'False': AxiomTokenType.BOOL,
+            'True': AxionTokenType.BOOL,
+            'False': AxionTokenType.BOOL,
 
-            'class': AxiomTokenType.CLASS,
-            'enum': AxiomTokenType.ENUM,
+            'class': AxionTokenType.CLASS,
+            'enum': AxionTokenType.ENUM,
 
-            #'script': AxiomTokenType.SCRIPT,
-            #'config': AxiomTokenType.CONFIG,
+            #'script': AxionTokenType.SCRIPT,
+            #'config': AxionTokenType.CONFIG,
 
-            'block': AxiomTokenType.BLOCK,
-            'python': AxiomTokenType.PYTHON,
+            'block': AxionTokenType.BLOCK,
+            'python': AxionTokenType.PYTHON,
 
-            'is': AxiomTokenType.IS,
-            'in': AxiomTokenType.IN,
-            'and': AxiomTokenType.AND,
-            'or': AxiomTokenType.OR,
-            'None': AxiomTokenType.NONE,
-            'not': AxiomTokenType.NOT,
+            'is': AxionTokenType.IS,
+            'in': AxionTokenType.IN,
+            'and': AxionTokenType.AND,
+            'or': AxionTokenType.OR,
+            'None': AxionTokenType.NONE,
+            'not': AxionTokenType.NOT,
 
-            'fun': AxiomTokenType.FUN,
-            'return': AxiomTokenType.RETURN
+            'fun': AxionTokenType.FUN,
+            'return': AxionTokenType.RETURN
         }
 
 
@@ -130,7 +130,7 @@ class AxiomLexer:
             self.error("second quotation mark not found")
 
         self.advance()  # пропускаем закрывающую кавычку
-        return AxiomTokenType.STRING, result
+        return AxionTokenType.STRING, result
 
 
     def read_identifier(self):
@@ -156,7 +156,7 @@ class AxiomLexer:
             self.error("second quotation mark not found")
 
         self.advance() # пропускаем закрывающую кавычку
-        return AxiomTokenType.STRING, result
+        return AxionTokenType.STRING, result
 
 
 
@@ -193,9 +193,9 @@ class AxiomLexer:
             self.error("Неверный формат числа")
 
         if has_dot:
-            return AxiomTokenType.FLOAT, float(result) # если точка есть, возвращаем float
+            return AxionTokenType.FLOAT, float(result) # если точка есть, возвращаем float
         else:
-            return AxiomTokenType.INTEGER, int(result) # если точки нет, возвращаем int
+            return AxionTokenType.INTEGER, int(result) # если точки нет, возвращаем int
 
 
 
@@ -214,7 +214,7 @@ class AxiomLexer:
             if self.current_char is not None and (self.current_char.isdigit() or
                     (self.current_char == '.' and self.peekPosition() and self.peekPosition().isdigit())): # Числа
                 token_type, value = self.read_number()
-                return AxiomToken(token_type, value, self.line)
+                return AxionToken(token_type, value, self.line)
 
 
 
@@ -224,9 +224,9 @@ class AxiomLexer:
                 self.advance()
                 if self.current_char == '+':
                     self.advance()
-                    return AxiomToken(AxiomTokenType.INCREMENT, line=self.line)
+                    return AxionToken(AxionTokenType.INCREMENT, line=self.line)
                 else:
-                    return AxiomToken(AxiomTokenType.PLUS, line=self.line)
+                    return AxionToken(AxionTokenType.PLUS, line=self.line)
 
 
             if self.current_char == '-':
@@ -234,13 +234,13 @@ class AxiomLexer:
 
                 if self.current_char == '-':
                     self.advance()
-                    return AxiomToken(AxiomTokenType.DECREMENT, line=self.line)
+                    return AxionToken(AxionTokenType.DECREMENT, line=self.line)
 
                 if self.current_char == '>':
                     self.advance()
-                    return AxiomToken(AxiomTokenType.ARROW, line=self.line)
+                    return AxionToken(AxionTokenType.ARROW, line=self.line)
 
-                return AxiomToken(AxiomTokenType.MINUS, line=self.line)
+                return AxionToken(AxionTokenType.MINUS, line=self.line)
 
 
             if self.current_char == '*':
@@ -248,9 +248,9 @@ class AxiomLexer:
 
                 if self.current_char == '*':
                     self.advance()
-                    return AxiomToken(AxiomTokenType.POWER, line=self.line)
+                    return AxionToken(AxionTokenType.POWER, line=self.line)
                 else:
-                    return AxiomToken(AxiomTokenType.MULTIPLY, line=self.line)
+                    return AxionToken(AxionTokenType.MULTIPLY, line=self.line)
 
 
             if self.current_char == '/':
@@ -260,7 +260,7 @@ class AxiomLexer:
                     self.skip_comment()
                     continue
                 else:
-                    return AxiomToken(AxiomTokenType.DIVIDE, line=self.line)
+                    return AxionToken(AxionTokenType.DIVIDE, line=self.line)
 
 
             if self.current_char == '=':
@@ -268,9 +268,9 @@ class AxiomLexer:
 
                 if self.current_char == '=':
                     self.advance()
-                    return AxiomToken(AxiomTokenType.EQUALS, line=self.line)
+                    return AxionToken(AxionTokenType.EQUALS, line=self.line)
 
-                return AxiomToken(AxiomTokenType.ASSIGN, line=self.line)
+                return AxionToken(AxionTokenType.ASSIGN, line=self.line)
 
 
             if self.current_char == '&':
@@ -278,7 +278,7 @@ class AxiomLexer:
 
                 if self.current_char == '&':
                     self.advance()
-                    return AxiomToken(AxiomTokenType.AND)
+                    return AxionToken(AxionTokenType.AND)
 
                 self.error('[get_next_token] Where is the second "&" ?')
 
@@ -288,7 +288,7 @@ class AxiomLexer:
 
                 if self.current_char == '|':
                     self.advance()
-                    return AxiomToken(AxiomTokenType.OR)
+                    return AxionToken(AxionTokenType.OR)
 
                 self.error('[get_next_token] Where is the second "|" ?')
 
@@ -298,9 +298,9 @@ class AxiomLexer:
 
                 if self.current_char == '=':
                     self.advance()
-                    return AxiomToken(AxiomTokenType.NOT_EQUALS)
+                    return AxionToken(AxionTokenType.NOT_EQUALS)
 
-                return AxiomToken(AxiomTokenType.NOT)
+                return AxionToken(AxionTokenType.NOT)
 
 
             if self.current_char == '<':
@@ -308,10 +308,10 @@ class AxiomLexer:
 
                 if self.current_char == '=':
                     self.advance()
-                    return AxiomToken(AxiomTokenType.LESS_EQUAL, line=self.line)
+                    return AxionToken(AxionTokenType.LESS_EQUAL, line=self.line)
 
 
-                return AxiomToken(AxiomTokenType.LESS, line=self.line)
+                return AxionToken(AxionTokenType.LESS, line=self.line)
 
 
             if self.current_char == '>':
@@ -319,9 +319,9 @@ class AxiomLexer:
 
                 if self.current_char == '=':
                     self.advance()
-                    return AxiomToken(AxiomTokenType.GREATER_EQUAL, line=self.line)
+                    return AxionToken(AxionTokenType.GREATER_EQUAL, line=self.line)
 
-                return AxiomToken(AxiomTokenType.GREATER, line=self.line)
+                return AxionToken(AxionTokenType.GREATER, line=self.line)
 
 
             if self.current_char == '{':
@@ -329,62 +329,62 @@ class AxiomLexer:
                 if self.current_char == '$':
                     self.advance()
                     code = self.read_code_block()
-                    return AxiomToken(AxiomTokenType.CODE_BLOCK, value=code, line=self.line)
+                    return AxionToken(AxionTokenType.CODE_BLOCK, value=code, line=self.line)
 
-                return AxiomToken(AxiomTokenType.LBRACE, line=self.line)
+                return AxionToken(AxionTokenType.LBRACE, line=self.line)
 
             if self.current_char == '}':
                 self.advance()
-                return AxiomToken(AxiomTokenType.RBRACE, line=self.line)
+                return AxionToken(AxionTokenType.RBRACE, line=self.line)
 
 
             if self.current_char == ';':
                 self.advance()
-                return AxiomToken(AxiomTokenType.SEMICOLON, line=self.line)
+                return AxionToken(AxionTokenType.SEMICOLON, line=self.line)
 
             if self.current_char == ':':
                 self.advance()
-                return AxiomToken(AxiomTokenType.COLON, line=self.line)
+                return AxionToken(AxionTokenType.COLON, line=self.line)
 
             if self.current_char == '%':
                 self.advance()
-                return  AxiomToken(AxiomTokenType.MOD, line=self.line)
+                return  AxionToken(AxionTokenType.MOD, line=self.line)
 
             if self.current_char == '(':
                 self.advance()
-                return AxiomToken(AxiomTokenType.LPAREN, line=self.line)
+                return AxionToken(AxionTokenType.LPAREN, line=self.line)
 
             if self.current_char == ')':
                 self.advance()
-                return AxiomToken(AxiomTokenType.RPAREN, line=self.line)
+                return AxionToken(AxionTokenType.RPAREN, line=self.line)
 
             if self.current_char == '[':
                 self.advance()
-                return AxiomToken(AxiomTokenType.LBRACKET, line=self.line)
+                return AxionToken(AxionTokenType.LBRACKET, line=self.line)
 
             if self.current_char == ']':
                 self.advance()
-                return AxiomToken(AxiomTokenType.RBRACKET, line=self.line)
+                return AxionToken(AxionTokenType.RBRACKET, line=self.line)
 
             if self.current_char == ';':
                 self.advance()
-                return AxiomToken(AxiomTokenType.SEMICOLON, line=self.line)
+                return AxionToken(AxionTokenType.SEMICOLON, line=self.line)
 
             if self.current_char == ',':
                 self.advance()
-                return AxiomToken(AxiomTokenType.COMMA, line=self.line)
+                return AxionToken(AxionTokenType.COMMA, line=self.line)
 
             if self.current_char == '.':
                 self.advance()
-                return AxiomToken(AxiomTokenType.DOT, line=self.line)
+                return AxionToken(AxionTokenType.DOT, line=self.line)
 
             if self.current_char == '"': #
                 token_type, value = self.read_string_double_quotes()
-                return AxiomToken(token_type, value, self.line)
+                return AxionToken(token_type, value, self.line)
 
             if self.current_char == "'": #
                 token_type, value = self.read_string_single_quotes()
-                return AxiomToken(token_type, value, self.line)
+                return AxionToken(token_type, value, self.line)
 
 
             if self.current_char == "#":  # если символ который мы проверяем равен символу комментария (я сделал 2 символа комментариев)
@@ -400,19 +400,19 @@ class AxiomLexer:
 
 
                     # Для булевых значений возвращаем их значение
-                    if token_type == AxiomTokenType.BOOL:
+                    if token_type == AxionTokenType.BOOL:
                         bool_value = (identifier == 'True')
-                        return AxiomToken(token_type, bool_value, self.line)
-                    return AxiomToken(token_type, identifier, self.line)
+                        return AxionToken(token_type, bool_value, self.line)
+                    return AxionToken(token_type, identifier, self.line)
 
                 # Обычный идентификатор (если ничего не нашли возвращаем их название)
-                return AxiomToken(AxiomTokenType.IDENTIFIER, identifier, self.line)
+                return AxionToken(AxionTokenType.IDENTIFIER, identifier, self.line)
 
             else:
                 self.error(f"Unexpected character: {repr(self.current_char)} (code {ord(self.current_char)})")
 
 
-        return AxiomToken(AxiomTokenType.EOF, line=self.line)
+        return AxionToken(AxionTokenType.EOF, line=self.line)
 
 
 
@@ -426,5 +426,5 @@ if __name__ == '__main__':
     
     """
 
-    lexer = AxiomLexer(code)
+    lexer = AxionLexer(code)
     tokens = []
