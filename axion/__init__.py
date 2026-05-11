@@ -1,4 +1,4 @@
-# author https://github.com/MIrrox27/Axiom-Language
+# author https://github.com/MIrrox27/Axion-Language
 # __init__.py
 
 
@@ -31,9 +31,9 @@ _check_author_maker()
 import builtins
 builtins.__axiom_verified__ = True
 
-from axiom.AxiomTokens import *
-from axiom.AxiomLexer import *
-from axiom.AxiomParser import *
-from axiom.AxiomASTNodes import *
-from axiom.AxiomInterpreter import *
-from axiom.repl import *
+from axion.AxionTokens import *
+from axion.AxionLexer import *
+from axion.AxionParser import *
+from axion.AxionASTNodes import *
+from axion.AxionInterpreter import *
+from axion.repl import *
