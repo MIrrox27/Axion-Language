@@ -1,12 +1,10 @@
-# author https://github.com/MIrrox27/Axiom-Language
- // Пример кода, в котором создается модель, добавляется определенный контекст и отправляется запрос
 
 
 import ai
 
-val MODEL_TOKEN = 'api'
-val MODEL_URL = 'url'
-val MODEL_NAME = 'name'
+var MODEL_TOKEN = 'api'
+var MODEL_URL = 'model'
+var MODEL_NAME = 'model_name'
 
 var model = ai.set_model(MODEL_NAME, 0.5, 1500)
 //print("Модель создана", model)
@@ -35,4 +33,3 @@ for (var i = 0; i < 10; i++){
     clrprint(" --- Ответ: ", ai.send_msg(msg, client, model)) // задаем вопрос нейросети и сразу же получаем ответ
 
 }
-
