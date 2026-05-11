@@ -8,7 +8,7 @@ import os, sys
 
 def _check_author_maker():
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    required_marker = "# author https://github.com/MIrrox27/Axiom-Language"
+    required_marker = "# author https://github.com/MIrrox27/Axion-Language"
 
     for filename in os.listdir(current_dir):
         if filename.endswith('.py') and not filename.startswith("__"):
@@ -19,7 +19,7 @@ def _check_author_maker():
                     if first_line != required_marker:
                         raise RuntimeError(
                             f"Integrity check failed: {filename} does not contain required author marker.\n"
-                            f"All Axiom source files must start with: {required_marker}"
+                            f"All Axion source files must start with: {required_marker}"
                         )
 
             except Exception as e:
@@ -29,7 +29,7 @@ def _check_author_maker():
 _check_author_maker()
 
 import builtins
-builtins.__axiom_verified__ = True
+builtins.__axion_verified__ = True
 
 from axion.AxionTokens import *
 from axion.AxionLexer import *
