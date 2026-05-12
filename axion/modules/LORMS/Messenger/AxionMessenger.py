@@ -1,7 +1,7 @@
-# author https://github.com/MIrrox27/Axiom-Language
-# AxiomMessenger.py
+# author https://github.com/MIrrox27/Axion-Language
+# AxionMessenger.py
 
-from axiom.modules.LORMS.AxiomLORMSModule import Messenger
+from axion.modules.LORMS.AxionLORMSModule import Messenger
 
 from pathlib import Path
 from socketserver import ThreadingMixIn
