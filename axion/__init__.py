@@ -5,7 +5,6 @@
 __version__ = "0.2.3"
 
 import os, sys
-
 def _check_author_maker():
     current_dir = os.path.dirname(os.path.abspath(__file__))
     required_marker = "# author https://github.com/MIrrox27/Axion-Language"

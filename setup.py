@@ -1,28 +1,35 @@
-# author https://github.com/MIrrox27/Axiom-Language
+# author https://github.com/MIrrox27/Axion-Language
 # setup.py
 
 
 from setuptools import setup, find_packages
-from axiom import __version__
+from axion import __version__
 
 with open("README.md", 'r', encoding="utf-8") as fh:
     long_description = fh.read()
 
+import re
+with open("axion/__init__.py", "r", encoding="utf-8") as f:
+    version_match = re.search(r"__version__\s*=\s*['\"]([^'\"]+)['\"]", f.read())
+    __version__ = version_match.group(1) if version_match else __version__
+
+
+
 setup(
-    name="axiom",
+    name="axion",
     version=__version__,
-    description="Axiom Programming Language",
+    description="Axion Programming Language",
     long_description=long_description,
     long_description_content_type="text/markdown",
 
     author="Maksim Pronkin",
     author_email="maksim.pronkin@gmail.com",
-    url="https://github.com/MIrrox27/Axiom-Language",
+    url="https://github.com/MIrrox27/Axion-Language",
 
     packages=find_packages(),
     entry_points={
         "console_scripts": [
-            "axiom = axiom.__main__:main",
+            "axion = axion.__main__:main",
         ],
     },
 

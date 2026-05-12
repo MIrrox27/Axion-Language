@@ -420,7 +420,7 @@ class AxionInterpreter: # класс интерпретатора
         module.define('reset_context', Callable(f'{module_name}.reset_context', -1, reset_context_func))
         module.define('add_msg_to_context', Callable(f'{module_name}.add_msg_to_context', 2, add_msg_to_context_func))
         module.define('get_client_info', Callable(f'{module_name}.get_client_info', -1, get_client_info_func))
-        module.define('get_context', Callable(f'{module_name}.', -1, get_context_func))
+        module.define('get_context', Callable(f'{module_name}.get_context', -1, get_context_func))
 
 
                 # --- функции Response ---
@@ -527,7 +527,7 @@ class AxionInterpreter: # класс интерпретатора
         if isinstance(obj, Module):
             return obj.get(node.member)
 
-        print(obj)
+        #print(obj)
         if hasattr(obj, node.member):
             return getattr(obj, node.member)
 

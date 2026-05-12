@@ -1,11 +1,11 @@
 
 <div align="center">
-  <h1>⚡ Axiom Language</h1>
+  <h1>⚡ Axion Language</h1>
   <p><strong>Простой скриптовый язык для автоматизации и конфигурации</strong></p>
   <p>
-    <a href="https://github.com/MIrrox27/Axiom/blob/main/doc/01-getting-started.md">Doc</a> •
-    <a href="https://github.com/MIrrox27/Axiom/blob/main/doc/07-exaples.md">Examples</a> •
-    <a href="https://github.com/MIrrox27/Axiom/issues">Report a bug</a>
+    <a href="https://github.com/MIrrox27/Axion-Language/blob/main/doc/01-getting-started.md">Doc</a> •
+    <a href="https://github.com/MIrrox27/Axion-Language/blob/main/doc/07-exaples.md">Examples</a> •
+    <a href="https://github.com/MIrrox27/Axion-Language/issues">Report a bug</a>
   </p>
   <p>
     <img src="https://img.shields.io/badge/version-0.1.0-blue.svg" alt="Version">
