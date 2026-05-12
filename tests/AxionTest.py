@@ -212,7 +212,7 @@ class Tests:
         print(f"\n ---Errors: {instructions_err}")
 
     def test_parser_loops(self):
-        print("ТЕСТИРОВАНИЕ ЦИКЛОВ")
+        print("\nТЕСТИРОВАНИЕ ЦИКЛОВ")
         print("=" * 60)
         """     На данном этапе я не подключил обработку var и val
 
@@ -232,8 +232,8 @@ class Tests:
             ("for (; ;) { var ex = 1; var i = i + 1; }", "for без инкремента"),
 
             # FOREACH (после добавления IN)
-            ("foreach item in items { val value = 'value 123 ;1;1 != тест '; }", "foreach по коллекции"),
-            ("foreach var x in range { val text = '{value на русском и английском}'; }", "foreach с вызовом функции"),
+            ("foreach (item in items) { val value = 'value 123 ;1;1 != тест '; }", "foreach по коллекции"),
+            ("foreach (var x in range) { val text = '{value на русском и английском}'; }", "foreach с вызовом функции"),
         ]
 
         for code, description in test_cases:
@@ -367,8 +367,8 @@ class Tests:
             "for (; i < 10; i = i + 1) { }",
             "for (var i = 0; ; i = i + 1) { }",
             "for (var i = 0; i < 10; ) { i = i + 1; }",
-            "foreach item in items { prnt = item; }",
-            "foreach var item in items { item = prnt + 1; }",
+            "foreach (var item in items) { prnt = item; }",
+            "foreach (var item in items) { item = prnt + 1; }",
 
             # Сложные комбинации
             "{ var x = 0; while (x < 5) { if x % 2 == 0 { x = x + 2; } else { x = x + 1; } } }",
