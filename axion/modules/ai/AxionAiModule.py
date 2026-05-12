@@ -1,6 +1,6 @@
-# author https://github.com/MIrrox27/Axiom-Language
+# author https://github.com/MIrrox27/Axion-Language
 # Ai Module
-# AxiomAiModule.py
+# AxionAiModule.py
 
 from openai import OpenAI
 import requests, json
@@ -8,7 +8,7 @@ import os, time
 
 from pyexpat.errors import messages
 
-from axiom.modules.ai.api import MODEL_URL, MODEL_TOKEN, MODEL_NAME # токен и url
+from axion.modules.ai.api import MODEL_URL, MODEL_TOKEN, MODEL_NAME # токен и url
 
 
 """
