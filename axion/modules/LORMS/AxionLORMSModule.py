@@ -1,4 +1,4 @@
-# author https://github.com/MIrrox27/Axiom-Language
+# author https://github.com/MIrrox27/Axion-Language
 
 import re, http, requests, html, urllib
 
