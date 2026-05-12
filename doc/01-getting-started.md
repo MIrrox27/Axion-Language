@@ -5,21 +5,21 @@
 
 ## О языке
 <p>
-    Axiom - не строго-типизированный, интерпретируемый язык, с несложным синтаксисом, 
+    Axion - не строго-типизированный, интерпретируемый язык, с несложным синтаксисом, 
     предназначенный для создания поддерживаемого программного обеспечения и обучения.
 </p>
 
 
 <p>
-    Синтаксис у Axiom достаточно легкий, за основу был взят Python, но с добавлением
+    Синтаксис у Axion достаточно легкий, за основу был взят Python, но с добавлением
     C++, Kotlin и немного C#, поэтому он очень 
     хорошо подходит новичкам.
 </p>
 
 
 <p>
-    Axiom выделяется своей возможностью код на двух языках одновременно -
-    сам Axiom и встроенный Python.
+    Axion выделяется своей возможностью код на двух языках одновременно -
+    сам Axion и встроенный Python.
 </p>
 
 <p>
@@ -34,7 +34,7 @@
 ## Шаги по установке (Windows)
 
 1. Установите интерпретатор из официального 
-<a herf="https://github.com/MIrrox27/Axiom/releases/">источника</a>.
+<a herf="https://github.com/MIrrox27/Axion/releases/">источника</a>.
 
 
 2. Добавьте его в переменную PATH командой:
@@ -48,12 +48,12 @@ set PATH=%PATH%;C:\your\path\to\interpreter
 
 ## Первая программа
 
-```Axiom
+```Axion
 print('Hello World!')
 ```
 Нужно сохранить этот код в формате `.ax` и запустить его командой:
 ```bash
-axiom \path\to\your\file
+axion \path\to\your\file
 ```
 
 
@@ -62,13 +62,13 @@ axiom \path\to\your\file
 <table>
 <tr><td width=33% valign=top>
 
-* [Начало работы](https://github.com/MIrrox27/Axiom/blob/main/doc/01-getting-started.md)
+* [Начало работы](https://github.com/MIrrox27/Axion-Language/blob/main/doc/01-getting-started.md)
   * [О языке](#о-языке)
   * [Шаги по установке](#шаги-по-установке-windows)
   * [Первая программа](#первая-программа)
   
 
-* [Синтаксис](https://github.com/MIrrox27/Axiom/blob/main/doc/02-syntax.md)
+* [Синтаксис](https://github.com/MIrrox27/Axion-Language/blob/main/doc/02-syntax.md)
 
 
 </table>
