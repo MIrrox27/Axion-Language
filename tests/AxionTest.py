@@ -1,11 +1,11 @@
-# author https://github.com/MIrrox27/Axiom
-# AxiomTest.py
+# author https://github.com/MIrrox27/Axion-Language
+# AxionTest.py
 
-from axiom.AxiomLexer import AxiomLexer
-from axiom.AxiomTokens import *
-from axiom.AxiomASTNodes import *
-from axiom.AxiomParser import AxiomParser
-from axiom.AxiomInterpreter import *
+from axion.AxionLexer import AxionLexer
+from axion.AxionTokens import *
+from axion.AxionASTNodes import *
+from axion.AxionParser import AxionParser
+from axion.AxionInterpreter import *
 
 
 class Tests:
@@ -52,7 +52,7 @@ class Tests:
         print("Финальный Тест")
         print("=" * 60)
 
-        lexer = AxiomLexer(self.test_code)
+        lexer = AxionLexer(self.test_code)
         tokens = []
 
         print("Исходный код:")
@@ -66,7 +66,7 @@ class Tests:
             tokens.append(token)
             print(f"Строка {token.line:3d}: {token}")
 
-            if token.type == AxiomTokenType.EOF:
+            if token.type == AxionTokenType.EOF:
                 break
 
         print("=" * 60)
@@ -102,11 +102,11 @@ class Tests:
         for description, code in edge_cases:
             print(f"\n{description}:")
             print(f"Код: '{code}'")
-            lexer = AxiomLexer(code)
+            lexer = AxionLexer(code)
             while True:
                 token = lexer.get_next_token()
                 print(f"  {token}")
-                if token.type == AxiomTokenType.EOF:
+                if token.type == AxionTokenType.EOF:
                     break
 
     def test_AST(self):
@@ -153,26 +153,26 @@ class Tests:
         # СЧЕТЧИКИ:
         instructions_err = 0
 
-        lexer = AxiomLexer("x + 5")
-        parser = AxiomParser(lexer)
+        lexer = AxionLexer("x + 5")
+        parser = AxionParser(lexer)
 
         print(f"Текущий токен: {parser.current_token}")
         # Должно быть: Token(IDENTIFIER, 'x', line: 1)
 
         # Проверяем идентификатор
-        parser.eat(AxiomTokenType.IDENTIFIER)
+        parser.eat(AxionTokenType.IDENTIFIER)
         print(f"{parser.current_token}")
         # Должно быть: Token(PLUS, line: 1)
 
-        parser.eat(AxiomTokenType.PLUS)
+        parser.eat(AxionTokenType.PLUS)
         print(parser.current_token)
-        # должно быть Token(AxiomTokenType.INTEGER, 5, line: 1)
+        # должно быть Token(AxionTokenType.INTEGER, 5, line: 1)
 
         print('><><' * 60)
         test_cases = [
             # Простые объявления
             ("var x;", "VarDeclaration с именем x без значения"),
-            ("varAxiome = 'тест на русском'", "VarDeclaration с именем x и текстовым значением "),
+            ("var Axion = 'тест на русском'", "VarDeclaration с именем x и текстовым значением "),
             ("val y_s2a = 10;", "VarDeclaration с val, именем y_s2a и значением 10"),
 
             # Блоки кода
@@ -195,15 +195,15 @@ class Tests:
             print(f"\nТест: {description}")
             print(f"Код: {code}")
 
-            lexer = AxiomLexer(code)
-            parser = AxiomParser(lexer)
+            lexer = AxionLexer(code)
+            parser = AxionParser(lexer)
 
             try:
                 result = parser.parse_statement()
                 print(f"Результат: {result}")
 
                 # Проверяем, что весь код разобран
-                if parser.current_token.type != AxiomTokenType.EOF:
+                if parser.current_token.type != AxionTokenType.EOF:
                     print(f"ВНИМАНИЕ: Не весь код разобран. Остался: {parser.current_token}")
                     instructions_err += 1
 
@@ -222,7 +222,7 @@ class Tests:
         test_cases = [
             # WHILE
             ("while x < 5 { val x = 5; val y = 10; }", "простой while"),
-            ("while (x < 5) { if 1 == 1{ val I_Love_Axiome = 1;} }", "while со скобками"),
+            ("while (x < 5) { if 1 == 1{ val I_Love_Axione = 1;} }", "while со скобками"),
             ("while true { }", "бесконечный while (пустое тело)"),
 
             # FOR (пока только с выражением в инициализации)
@@ -239,17 +239,17 @@ class Tests:
         for code, description in test_cases:
             print(f"\n {description}")
             print(f"Код: {code}")
-            lexer = AxiomLexer(code)
-            parser = AxiomParser(lexer)
+            lexer = AxionLexer(code)
+            parser = AxionParser(lexer)
             try:
                 ast = parser.parse_statement()
                 print(f"AST: {ast}")
-                if parser.current_token.type != AxiomTokenType.EOF:
+                if parser.current_token.type != AxionTokenType.EOF:
                     print(f"  Остались токены: {parser.current_token}")
                 else:
                     print(" Весь код разобран")
             except Exception as e:
-                if str(e) != "[Parser Error]: Received AxiomTokenType.PRINT":  # временно пропускаем ошибку с отсутствием функции
+                if str(e) != "[Parser Error]: Received AxionTokenType.PRINT":  # временно пропускаем ошибку с отсутствием функции
                     print(f" Ошибка: {e}")
                 else:
                     print(" Весь код разобран")
@@ -266,7 +266,7 @@ class Tests:
             # Простой if
             ('if x > 5 {  }', "if без else"),
             # if-else
-            ('if x > 5 { var I_Love_Axiome = 1; } else { var I_Love_Axiome = 2; }', "if-else"),
+            ('if x > 5 { var I_Love_Axione = 1; } else { var I_Love_Axione = 2; }', "if-else"),
             # if-elif-else
             ('if x > 5 { var i = true; } elif x == 5 { var i = false; } else {  }', "if-elif-else"),
             # Несколько elif
@@ -285,22 +285,22 @@ class Tests:
             print(f"\n>>> {description}")
             print(f"Код: {code}")
 
-            lexer = AxiomLexer(code)
-            parser = AxiomParser(lexer)
+            lexer = AxionLexer(code)
+            parser = AxionParser(lexer)
 
             try:
                 ast = parser.parse_statement()
                 print(f"AST: {ast}")
 
                 # Проверяем, что весь код разобран
-                if parser.current_token.type != AxiomTokenType.EOF:
+                if parser.current_token.type != AxionTokenType.EOF:
                     print(f"----Остались токены: {parser.current_token}")
                     tokens += 1
                 else:
                     print("+Весь код разобран")
 
             except Exception as e:
-                if str(e) != "[Parser Error]: Received AxiomTokenType.PRINT":  # временно пропускаем ошибки с неизвестными функциями
+                if str(e) != "[Parser Error]: Received AxionTokenType.PRINT":  # временно пропускаем ошибки с неизвестными функциями
                     err += 1
                     print(f"----Ошибка: {e}")
 
@@ -318,8 +318,8 @@ class Tests:
                 for code, description in error_cases:
                     print(f"\n>>> {description}")
                 print(f"Код: {code}")
-                lexer = AxiomLexer(code)
-                parser = AxiomParser(lexer)
+                lexer = AxionLexer(code)
+                parser = AxionParser(lexer)
             try:
                 ast = parser.parse_statement()
                 print(f"-----Ошибка не обнаружена! AST: {ast}")
@@ -376,12 +376,12 @@ class Tests:
 
         print("Запуск позитивных тестов...")
         for i, code in enumerate(positive_tests, 1):
-            lexer = AxiomLexer(code)
-            parser = AxiomParser(lexer)
+            lexer = AxionLexer(code)
+            parser = AxionParser(lexer)
             try:
                 ast = parser.parse_statement()
                 # Проверяем, что после парсинга достигнут конец файла
-                assert parser.current_token.type == AxiomTokenType.EOF, \
+                assert parser.current_token.type == AxionTokenType.EOF, \
                     f"Тест {i}: после парсинга остались токены: {parser.current_token}"
                 # Если мы дошли сюда без исключений, тест пройден
             except Exception as e:
@@ -404,8 +404,8 @@ class Tests:
 
         print("Запуск негативных тестов...")
         for i, (code, desc) in enumerate(negative_tests, 1):
-            lexer = AxiomLexer(code)
-            parser = AxiomParser(lexer)
+            lexer = AxionLexer(code)
+            parser = AxionParser(lexer)
             try:
                 ast = parser.parse_statement()
                 # Если исключения не возникло — ошибка теста
@@ -420,7 +420,7 @@ class Tests:
         print("\n[V] Все тесты парсера успешно пройдены!")
 
 
-class TestInterpreter(AxiomInterpreter):
+class TestInterpreter(AxionInterpreter):
     # интерпретатор с захватом вывода print для тестирования
 
     def __init__(self):
@@ -438,14 +438,14 @@ class TestInterpreter(AxiomInterpreter):
 
 def run_test(code, expected_output=None, expected_error=None):
     # Запускает код и возвращает вывод или ошибку
-    lexer = AxiomLexer(code)
-    parser = AxiomParser(lexer)
+    lexer = AxionLexer(code)
+    parser = AxionParser(lexer)
     interpreter = TestInterpreter()
 
     # Парсим программу
     statements = []
     try:
-        while parser.current_token.type != AxiomTokenType.EOF:
+        while parser.current_token.type != AxionTokenType.EOF:
             stmt = parser.parse_statement()
             statements.append(stmt)
     except Exception as e:
@@ -596,14 +596,14 @@ def test_division_by_zero():
     code = """
     var x = 5 / 0;
     """
-    run_test(code, expected_error="[AxiomInterpreter]: [visit_BinaryOp] Division by zero")
+    run_test(code, expected_error="[AxionInterpreter]: [visit_BinaryOp] Division by zero")
 
 
 def test_undefined_variable():
     code = """
     print(y);
     """
-    run_test(code, expected_error="[AxiomEnvironment]: [get] Variable 'y' is not defined")
+    run_test(code, expected_error="[AxionEnvironment]: [get] Variable 'y' is not defined")
 
 
 def _test_all():
