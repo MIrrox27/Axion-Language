@@ -36,8 +36,12 @@ builtins.license = license
 
 
 
-def run_file(filename):
+def run_file(param):
     allowed_extensions = ('.axn', '.axi', '.ax')
+    tags = {}
+
+    if not param in tags:
+        filename = param
 
 
 
