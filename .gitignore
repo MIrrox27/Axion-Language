@@ -1,6 +1,6 @@
 .venv/
 .idea/
-axiom/__pycache__/
+axion/__pycache__/
 
 *.egg-info/
 build/
@@ -12,4 +12,4 @@ axiom.exe
 tests/mini_test.py
 tests/test_web.py
 
-axiom/modules/ai/api.py
+axion/modules/ai/api.py
