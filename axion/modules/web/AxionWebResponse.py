@@ -1,8 +1,8 @@
-# author https://github.com/MIrrox27/Axiom
-# AxiomWebResponse.py
+# author https://github.com/MIrrox27/Axion-Language
+# AxionWebResponse.py
 
 
-from axiom.modules.web.AxiomWebModule import *
+from axion.modules.web.AxionWebModule import *
 import json
 
 class Response: # ответ сервера
