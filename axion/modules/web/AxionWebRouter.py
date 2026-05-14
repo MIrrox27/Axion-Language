@@ -1,9 +1,9 @@
-# author https://github.com/MIrrox27/Axiom
-# AxiomWebRouter.py
+# # author https://github.com/MIrrox27/Axion-Language
+# AxionWebRouter.py
 
 import json
 import re
-#from axiom.modules.web.AxiomWebModule import *
+#from axion.modules.web.AxionWebModule import *
 
 
 class Router:
