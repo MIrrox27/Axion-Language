@@ -1,6 +1,7 @@
-# author https://github.com/MIrrox27/Axiom
+# author https://github.com/MIrrox27/Axion-Language
 
-from axiom.modules.web.AxiomWebModule import WebHandler, Output
+
+from axion.modules.web.AxionWebModule import WebHandler, Output
 from http.server import HTTPServer
 
 
