@@ -1,7 +1,7 @@
-# author https://github.com/MIrrox27/Axiom
-# AxiomWebRequest.py
+# author https://github.com/MIrrox27/Axion-Language
+# AxionWebRequest.py
 
-from axiom.modules.web.AxiomWebModule import *
+from axion.modules.web.AxionWebModule import *
 import json
 
 class Request:
