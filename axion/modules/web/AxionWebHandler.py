@@ -1,7 +1,7 @@
-# author https://github.com/MIrrox27/Axiom
-# AxiomWebHandler
+# author https://github.com/MIrrox27/Axion-Language
+# AxionWebHandler
 
-from axiom.modules.web.AxiomWebModule import *
+from axion.modules.web.AxionWebModule import *
 
 class WebHandler(BaseHTTPRequestHandler):
     router = None
