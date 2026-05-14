@@ -1,11 +1,11 @@
-# author https://github.com/MIrrox27/Axiom
+# # author https://github.com/MIrrox27/Axion-Language
 # Общие основные классы
 
 import http, requests, urllib, webbrowser, socket, ssl
 import json, socketserver
 from http.server import HTTPServer, SimpleHTTPRequestHandler, BaseHTTPRequestHandler
 
-from axiom.modules.web import AxiomWebRouter, AxiomWebRequest, AxiomWebResponse
+from axion.modules.web import AxionWebRouter, AxionWebRequest, AxionWebResponse
 
 class Output:
     def __init__(self, module):
