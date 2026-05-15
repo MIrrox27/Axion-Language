@@ -3,5 +3,5 @@
 
 
 pub fn start(){
-  println!("Гойда!")
+  println!("https://github.com/MIrrox27/Axion-Language")
 }
