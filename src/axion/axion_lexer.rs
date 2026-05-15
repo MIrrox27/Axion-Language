@@ -44,4 +44,31 @@ static KEYWORDS: phf::Map<&'static str, AxionTokenType> = phf_map! {
 
 
   
-pub struct AxionLexer{}
+pub struct AxionLexer{
+  text: Vec<char>,
+  position: usize,
+  line: usize,
+  //current_char: Option<char>
+}
+
+impl AxionLexer {
+
+    fn current_char(&self) -> Option<char>{
+      self.text.get(self.position).copied()
+    }
+  
+    
+    fn new(code: String) -> Self {
+      //if code != None {
+      let chars: Vec<char> = code.chars().collect();
+      let pos: usize = 0;
+      let line: usize = 1;
+
+      AxionLexer { text: chars, position: pos, line: line }
+
+    }
+}
+
+    
+
+
