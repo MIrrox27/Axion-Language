@@ -49,24 +49,38 @@ pub struct AxionLexer{
   position: usize,
   line: usize,
   //current_char: Option<char>
+  end: bool
 }
 
 impl AxionLexer {
 
-    fn current_char(&self) -> Option<char>{
+    fn current_char(&self) -> Option<char>{ // Вместо переменной, будет каждый раз нахожиться сл символ
       self.text.get(self.position).copied()
     }
   
     
     fn new(code: String) -> Self {
-      //if code != None {
       let chars: Vec<char> = code.chars().collect();
       let pos: usize = 0;
       let line: usize = 1;
 
-      AxionLexer { text: chars, position: pos, line: line }
-
+      AxionLexer { text: chars, position: pos, line: line, end: false }
     }
+
+    fn adwance(&mut self){
+      let newline: char = '\n';
+
+      if self.current_char() == Some(newline) {
+        self.line += 1;
+      }
+      self.position += 1;
+
+      if self.position >= self.text.len(){
+          self.end = true;
+      }      
+    }
+
+
 }
 
     
