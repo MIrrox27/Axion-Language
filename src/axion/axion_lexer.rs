@@ -1,5 +1,7 @@
 // author https://github.com/MIrrox27/Axion-Language
 
+use std::hint::select_unpredictable;
+
 use super::axion_tokens::AxionToken; 
 use super::axion_tokens::AxionTokenType; 
 
@@ -52,12 +54,21 @@ pub struct AxionLexer{
   end: bool
 }
 
+
 impl AxionLexer {
 
     fn current_char(&self) -> Option<char>{ // Вместо переменной, будет каждый раз нахожиться сл символ
       self.text.get(self.position).copied()
     }
-  
+    
+
+    fn current_is_withspace(&self) -> bool{
+      match self.current_char() {
+        Some(ch) => ch.is_whitespace(),
+        None => false
+      }
+    }
+
     
     fn new(code: String) -> Self {
       let chars: Vec<char> = code.chars().collect();
@@ -79,6 +90,53 @@ impl AxionLexer {
           self.end = true;
       }      
     }
+
+    fn retrat(&mut self){
+      self.position -= 1;
+
+      if self.position >= self.text.len(){
+          self.end = true;
+      }      
+    }
+
+
+    fn peek_position(&mut self, lookhead: usize) -> Option<char>{
+      let peek_position = self.position + lookhead;
+
+      if peek_position >= self.text.len(){
+        return None;
+      }
+
+      return self.text.get(peek_position).copied();
+    }
+
+
+
+
+    fn skip_withspace(&mut self){
+      let newline: char = '\n';
+
+      while self.current_char() != None || self.current_char().is_withspace() {
+        
+        if self.current_char() == Some(newline) {
+            self.line += 1;
+        }
+          self.adwance();
+      }
+    }
+
+
+    fn skip_comment(&mut self) {
+      let newline: char = '\n';
+      while self.current_char() != None || self.current_char() != Some(newline){
+        self.adwance();
+      }
+      if self.current_char() == Some(newline){
+        self.adwance();
+      }
+    }
+
+
 
 
 }
