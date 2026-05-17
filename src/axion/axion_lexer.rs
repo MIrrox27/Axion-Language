@@ -116,7 +116,7 @@ impl AxionLexer {
     fn skip_withspace(&mut self){
       let newline: char = '\n';
 
-      while self.current_char() != None || self.current_char().is_withspace() {
+      while self.current_char() != None || self.current_is_withspace() {
         
         if self.current_char() == Some(newline) {
             self.line += 1;
