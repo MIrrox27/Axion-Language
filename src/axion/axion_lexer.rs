@@ -144,7 +144,9 @@ impl AxionLexer {
       }
     }
 
-    fn read_code_block(){} // <- Пока не реализуем 
+
+    fn read_code_block(){} // Пока не реализуем 
+
 
     fn read_string_single_quotes(&mut self){
       let quot: Option<char> = Some('\'');
@@ -154,8 +156,6 @@ impl AxionLexer {
       
       while self.current_char() != None || self.current_char() != quot{
           let current_char_str: String = self.current_char().map(|c| c.to_string()).unwrap_or_default();
-
-
           result = format!("{}{}", result, current_char_str);
           self.adwance();
       }
@@ -163,6 +163,28 @@ impl AxionLexer {
       if self.current_char() != quot{
         self.error("Second quotation mark not found", "read_string_single_quotes");
       }
+
+    }
+
+
+    fn read_string_double_quotes(&mut self){
+      let quot: Option<char> = Some('"');
+
+      self.adwance(); // Пропускаем первую кавычку
+      let mut result: String = String::new();
+      
+      while self.current_char() != None || self.current_char() != quot{
+          let current_char_str: String = self.current_char().map(|c| c.to_string()).unwrap_or_default();
+          result = format!("{}{}", result, current_char_str);
+          self.adwance();
+      }
+
+      if self.current_char() != quot{
+        self.error("Second quotation mark not found", "read_string_single_quotes");
+      }
+
+
+
 
     }
 
