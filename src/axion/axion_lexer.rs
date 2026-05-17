@@ -1,11 +1,13 @@
 // author https://github.com/MIrrox27/Axion-Language
+// axion_lexer.rs
 
-//use std::hint::select_unpredictable;
 
 use super::axion_tokens::AxionToken; 
 use super::axion_tokens::AxionTokenType; 
 use std::collections::HashMap;
 use phf::phf_map;
+
+
 
 
 
@@ -46,6 +48,7 @@ static KEYWORDS: phf::Map<&'static str, AxionTokenType> = phf_map! {
 
 
   
+
 pub struct AxionLexer{
   text: Vec<char>,
   position: usize,
@@ -53,6 +56,8 @@ pub struct AxionLexer{
   //current_char: Option<char>
   end: bool
 }
+
+
 
 
 impl AxionLexer { // Системные (вспомогательные) функции
@@ -63,12 +68,16 @@ impl AxionLexer { // Системные (вспомогательные) фун�
     
 }
 
+
+
+
 impl AxionLexer {
 
     fn current_char(&self) -> Option<char>{ // Вместо переменной, будет каждый раз нахожиться сл символ
       self.text.get(self.position).copied()
     }
     
+
 
     fn current_is_withspace(&self) -> bool{
       match self.current_char() {
@@ -78,6 +87,7 @@ impl AxionLexer {
     }
 
     
+
     fn new(code: String) -> Self {
       let chars: Vec<char> = code.chars().collect();
       let pos: usize = 0;
@@ -85,6 +95,8 @@ impl AxionLexer {
 
       AxionLexer { text: chars, position: pos, line: line, end: false }
     }
+
+
 
     fn adwance(&mut self){
       let newline: char = '\n';
@@ -99,6 +111,8 @@ impl AxionLexer {
       }      
     }
 
+
+
     fn retrat(&mut self){
       self.position -= 1;
 
@@ -106,6 +120,7 @@ impl AxionLexer {
           self.end = true;
       }      
     }
+
 
 
     fn peek_position(&mut self, lookhead: usize) -> Option<char>{
@@ -117,7 +132,6 @@ impl AxionLexer {
 
       return self.text.get(peek_position).copied();
     }
-
 
 
 
@@ -134,6 +148,7 @@ impl AxionLexer {
     }
 
 
+
     fn skip_comment(&mut self) {
       let newline: char = '\n';
       while self.current_char() != None || self.current_char() != Some(newline){
@@ -145,10 +160,12 @@ impl AxionLexer {
     }
 
 
+
     fn read_code_block(){} // Пока не реализуем 
 
 
-    fn read_string_single_quotes(&mut self){
+
+    fn read_string_single_quotes(&mut self) -> (AxionTokenType, String){
       let quot: Option<char> = Some('\'');
 
       self.adwance(); // Пропускаем первую кавычку
@@ -164,10 +181,13 @@ impl AxionLexer {
         self.error("Second quotation mark not found", "read_string_single_quotes");
       }
 
+      self.adwance();
+      return (AxionTokenType::StringType, result);
     }
 
 
-    fn read_string_double_quotes(&mut self){
+
+    fn read_string_double_quotes(&mut self) -> (AxionTokenType, String){
       let quot: Option<char> = Some('"');
 
       self.adwance(); // Пропускаем первую кавычку
@@ -183,11 +203,13 @@ impl AxionLexer {
         self.error("Second quotation mark not found", "read_string_single_quotes");
       }
 
-
-
-
+      self.adwance();
+      return (AxionTokenType::StringType, result);
     }
 
+
+
+    
 
 
 
