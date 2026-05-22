@@ -5,6 +5,8 @@
 use super::axion_tokens::AxionToken; 
 use super::axion_tokens::AxionTokenType; 
 use std::collections::HashMap;
+use std::fmt::format;
+use std::result;
 use phf::phf_map;
 
 
@@ -86,6 +88,16 @@ impl AxionLexer {
       }
     }
 
+
+    
+    fn current_is_digit(&self) -> bool {
+      match self.current_char() {
+          Some(ch) => ch.is_digit(10),
+          None => false
+      }
+    }
+
+
     
 
     fn new(code: String) -> Self {
@@ -138,7 +150,7 @@ impl AxionLexer {
     fn skip_withspace(&mut self){
       let newline: char = '\n';
 
-      while self.current_char() != None || self.current_is_withspace() {
+      while self.current_char() != None && self.current_is_withspace() {
         
         if self.current_char() == Some(newline) {
             self.line += 1;
@@ -151,7 +163,7 @@ impl AxionLexer {
 
     fn skip_comment(&mut self) {
       let newline: char = '\n';
-      while self.current_char() != None || self.current_char() != Some(newline){
+      while self.current_char() != None && self.current_char() != Some(newline){
         self.adwance();
       }
       if self.current_char() == Some(newline){
@@ -171,7 +183,7 @@ impl AxionLexer {
       self.adwance(); // Пропускаем первую кавычку
       let mut result: String = String::new();
       
-      while self.current_char() != None || self.current_char() != quot{
+      while self.current_char() != None && self.current_char() != quot{
           let current_char_str: String = self.current_char().map(|c| c.to_string()).unwrap_or_default();
           result = format!("{}{}", result, current_char_str);
           self.adwance();
@@ -193,7 +205,7 @@ impl AxionLexer {
       self.adwance(); // Пропускаем первую кавычку
       let mut result: String = String::new();
       
-      while self.current_char() != None || self.current_char() != quot{
+      while self.current_char() != None && self.current_char() != quot{
           let current_char_str: String = self.current_char().map(|c| c.to_string()).unwrap_or_default();
           result = format!("{}{}", result, current_char_str);
           self.adwance();
@@ -208,6 +220,23 @@ impl AxionLexer {
     }
 
 
+
+    fn read_identifier(&mut self) -> String {
+      let mut result: String = String::new();
+      let mut current_char_int = self.current_char().map_or(false, |c| c.is_numeric());
+
+      if current_char_int == true{
+        self.error("the name cannot start with a number", "read_identifier");
+      }
+
+      while self.current_char() != None && (self.current_char() == Some('_') || self.current_is_digit()) {
+          let current_char_str: String = self.current_char().map(|c| c.to_string()).unwrap_or_default();
+          result = format!("{}{}", result, current_char_str);
+          self.adwance();
+      }
+      return result;
+
+    }
 
     
 
